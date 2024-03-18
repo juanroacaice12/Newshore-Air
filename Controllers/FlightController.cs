@@ -46,8 +46,7 @@ namespace NewShoreAirAPI.Controllers
 
         private decimal ConvertPriceToCurrency(decimal price, string currency)
         {
-            // Implementa aquí la lógica para convertir el precio a la moneda deseada
-            // Por ahora, simplemente devuelve el precio sin cambios
+            
             return price;
         }
 
