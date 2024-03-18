@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Route Finder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="formulario">
+    <h1>Flight Route Finder</h1>
+    <form method="post">
+    <div class="origin">
+        <label for="origin">Origen:</label>
+        <input type="text" id="origin" required>
+    </div>
+    <div class="destination">
+        <label for="destination">Destino:</label>
+        <input type="text" id="destination" required>
+    </div>
+    </form>
+    <div>
+        <label for="currency">Moneda:</label>
+        <select id="currency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="COP">COP</option>
+            <!-- Agregar más opciones de moneda según sea necesario -->
+        </select>
+    </div>
+    <button id="search">Buscar Ruta</button>
+    <div id="result"></div>
+</div>
+
+    <script>
+        document.getElementById('search').addEventListener('click', function() {
+            var origin = document.getElementById('origin').value;
+            var destination = document.getElementById('destination').value;
+            var currency = document.getElementById('currency').value;
+
+            // Realizar solicitud al backend para obtener la ruta de vuelo en USD
+            fetch(`/api/flight?origin=${origin}&destination=${destination}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Convertir los valores de la ruta de vuelo a la moneda seleccionada
+                    var convertedData = convertCurrency(data, currency);
+
+                    // Mostrar los valores de la ruta de vuelo convertidos en la interfaz de usuario
+                    displayResult(convertedData);
+                })
+                .catch(error => {
+                    console.error('Error al obtener la ruta de vuelo:', error);
+                    document.getElementById('result').innerHTML = 'Error al obtener la ruta de vuelo. Por favor, intenta de nuevo más tarde.';
+                });
+        });
+
+        // Función para convertir los valores de la ruta de vuelo a la moneda seleccionada
+        function convertCurrency(data, currency) {
+            // Implementar la lógica de conversión de moneda aquí
+            // Esto puede implicar el uso de una API externa de conversión de moneda o una base de datos de tasas de cambio
+            // Por simplicidad, aquí asumimos que los valores ya están en USD y simplemente los mostramos en la moneda seleccionada
+            return data.map(flight => ({
+                ...flight,
+                price: flight.price, // Aquí realizaríamos la conversión de moneda real
+                currency: currency
+            }));
+        }
+
+        // Función para mostrar los valores de la ruta de vuelo convertidos en la interfaz de usuario
+        function displayResult(data) {
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<h2>Ruta de Vuelo</h2>';
+            data.forEach(flight => {
+                resultDiv.innerHTML += `<p>Origen: ${flight.origin}, Destino: ${flight.destination}, Precio: ${flight.price} ${flight.currency}</p>`;
+            });
+        }
+    </script>
+</body>
+</html>
