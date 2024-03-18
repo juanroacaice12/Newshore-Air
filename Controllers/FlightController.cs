@@ -41,9 +41,6 @@ namespace NewShoreAirAPI.Controllers
                 Price = 0
             };
 
-            // Implementa aquí la lógica para calcular la ruta de vuelo basada en los vuelos disponibles
-
-            // Por ahora, simplemente devolvemos una ruta vacía y un precio de 0
             return journey;
         }
 
